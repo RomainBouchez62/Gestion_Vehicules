@@ -70,8 +70,6 @@ C:\Users\InfoWare31\Desktop\ProjetGestionVehiculeC#\Projet_Gestion_Vehicules\bin
 C:\Users\InfoWare31\Desktop\ProjetGestionVehiculeC#\Projet_Gestion_Vehicules\bin\Debug\System.Threading.Tasks.Extensions.xml
 C:\Users\InfoWare31\Desktop\ProjetGestionVehiculeC#\Projet_Gestion_Vehicules\bin\Debug\MySql.Data.xml
 C:\Users\InfoWare31\Desktop\ProjetGestionVehiculeC#\Projet_Gestion_Vehicules\obj\Debug\Projet_Gestion_Vehicules.csprojAssemblyReference.cache
-C:\Users\InfoWare31\Desktop\ProjetGestionVehiculeC#\Projet_Gestion_Vehicules\obj\Debug\Projet_Gestion_Vehicules.AddEmployes.resources
-C:\Users\InfoWare31\Desktop\ProjetGestionVehiculeC#\Projet_Gestion_Vehicules\obj\Debug\Projet_Gestion_Vehicules.AddVehicules.resources
 C:\Users\InfoWare31\Desktop\ProjetGestionVehiculeC#\Projet_Gestion_Vehicules\obj\Debug\Projet_Gestion_Vehicules.formPrinc.resources
 C:\Users\InfoWare31\Desktop\ProjetGestionVehiculeC#\Projet_Gestion_Vehicules\obj\Debug\Projet_Gestion_Vehicules.Properties.Resources.resources
 C:\Users\InfoWare31\Desktop\ProjetGestionVehiculeC#\Projet_Gestion_Vehicules\obj\Debug\Projet_Gestion_Vehicules.csproj.GenerateResource.cache
@@ -79,3 +77,4 @@ C:\Users\InfoWare31\Desktop\ProjetGestionVehiculeC#\Projet_Gestion_Vehicules\obj
 C:\Users\InfoWare31\Desktop\ProjetGestionVehiculeC#\Projet_Gestion_Vehicules\obj\Debug\Projet_Gestion_Vehicules.csproj.CopyComplete
 C:\Users\InfoWare31\Desktop\ProjetGestionVehiculeC#\Projet_Gestion_Vehicules\obj\Debug\Projet_Gestion_Vehicules.exe
 C:\Users\InfoWare31\Desktop\ProjetGestionVehiculeC#\Projet_Gestion_Vehicules\obj\Debug\Projet_Gestion_Vehicules.pdb
+C:\Users\InfoWare31\Desktop\ProjetGestionVehiculeC#\Projet_Gestion_Vehicules\obj\Debug\Projet_Gestion_Vehicules.csproj.ResolveComReference.cache

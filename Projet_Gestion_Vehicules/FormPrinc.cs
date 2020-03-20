@@ -16,8 +16,8 @@ namespace Projet_Gestion_Vehicules
 {
     public partial class formPrinc : Form
     {
-        AddVehicules secondForm;
-        AddEmployes thirdForm;
+        //AddVehicules secondForm;
+        //AddEmployes thirdForm;
 
         //Initialisation et instanciation d'une connexion à la base
         BDD uneCo = new BDD();
@@ -28,40 +28,39 @@ namespace Projet_Gestion_Vehicules
 
         private void BtnAddEmployes_Click(object sender, EventArgs e)
         {
-            thirdForm = new AddEmployes();
-            thirdForm.ShowDialog(this);
+            //thirdForm = new AddEmployes();
+            //thirdForm.ShowDialog(this);
         }
 
         private void BtnAddVehicules_Click(object sender, EventArgs e)
         {
-            secondForm = new AddVehicules();
-            secondForm.ShowDialog(this);
+            //secondForm = new AddVehicules();
+            //secondForm.ShowDialog(this);
         }
 
         private void FormPrinc_Load(object sender, EventArgs e)
         {
-            //############################# REMPLISSAGE DATA GRID VIEW EMPLOYE ###################################
-            //dtGVEmployes.ColumnCount = 1;
-            //BindingSource unBDS = new BindingSource();
-
+            //############################# REMPLISSAGE DATA GRID VIEW EMPLOYE ##########################
             LoadDtgEmploye();
-            //dtGVEmployes.Columns[0].Name = "Nom";
-            //dtGVEmployes.DataSource = unBDS;
             //######################## FIN REMPLISSAGE ###################################
 
-            //############################# REMPLISSAGE DATA GRID VIEW RESERVATION ###################################
+            //############################# REMPLISSAGE DATA GRID VIEW RESERVATION ######################
             LoadDtgReservation();
+            //######################## FIN REMPLISSAGE ###################################
+
+            //############################# REMPLISSAGE DATA GRID VIEW VEHICULES ########################
+            LoadDtgVehicules();
             //######################## FIN REMPLISSAGE ###################################
 
             //############################# REMPLISSAGE COMBOBOX EMPLOYE ################################
             LoadCmbEmploye();
             //######################## FIN REMPLISSAGE #################################
 
-            //############################# REMPLISSAGE COMBOBOX VEHICULE ################################
+            //############################# REMPLISSAGE COMBOBOX VEHICULE ###############################
             LoadCmbVehicule();
             //######################## FIN REMPLISSAGE #################################
 
-            //############################# REMPLISSAGE COMBOBOX TYPE_VEHICULE ################################
+            //############################# REMPLISSAGE COMBOBOX TYPE_VEHICULE ##########################
             LoadCmbTypeVehicule();
             //######################## FIN REMPLISSAGE #################################
 
@@ -117,6 +116,23 @@ namespace Projet_Gestion_Vehicules
             }
         }
 
+
+        /// <summary>
+        ///  procédure qui rempli le datagridview des véhicules
+        /// </summary>
+        public void LoadDtgVehicules()
+        {
+            dtGVVehicules.Rows.Clear();
+            dtGVVehicules.Refresh();
+            List<Vehicule> mesE = new List<Vehicule>();
+
+            mesE = uneCo.giveAllVehicules();
+
+            foreach (Vehicule unV in mesE)
+            {
+                dtGVVehicules.Rows.Add(unV.getImmat(),unV.getDateMEC().ToString("dd-MM-yyyy"));
+            }
+        }
         /// <summary>
         /// Procédure qui rempli le combobox des types de vehicules
         /// </summary>
@@ -124,10 +140,11 @@ namespace Projet_Gestion_Vehicules
         {
             List<TypeVehicule> mesTypesV = new List<TypeVehicule>();
             mesTypesV = uneCo.giveTypeVehicule();
-            comboTypeVehicule.Items.Clear();
+            cmbTypeVehicule.Items.Clear();
             foreach (TypeVehicule unTV in mesTypesV)
             {
-                comboTypeVehicule.Items.Add(unTV.toString());
+                cmbTypeVehicule.ValueMember = unTV.getId().ToString();
+                cmbTypeVehicule.Items.Add(unTV.getNom());
             }
         }
 
@@ -235,17 +252,38 @@ namespace Projet_Gestion_Vehicules
                 verif = true;
             }
 
-            //Verif date choisie est égale ou supérieur à la date du jour
-            //TODO
+            //Verif que la date choisie est égale ou supérieur à la date du jour
+            DateTime dateDuJour = new DateTime();
+            dateDuJour = DateTime.Today;
+            if(verif && dtDateResa.Value<dateDuJour)
+            {
+                MessageBox.Show("La date de réservation ne peut pas être inférieur à  la date du jour !", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                verif = false;
+            }
+            else
+            {
 
-            //Verif heure pas egale
-            //TODO
+            }
 
-            //Verif que heure debut est inf a heure fin
+
+            //Verif que les heures de début et de fin ne sont pas identiques
+            TimeSpan heureDbt = new TimeSpan(int.Parse(cmbListingHeureDbt.Text), int.Parse(cmbListingMinuteDbt.Text), 00);
+            TimeSpan heureFin = new TimeSpan(int.Parse(cmbListingHeureFin.Text), int.Parse(cmbListingMinuteFin.Text), 00);
+            if(verif && TimeSpan.Compare(heureDbt,heureFin)==0)
+            {
+                verif = false;
+                MessageBox.Show("Erreur dans la séléction des horaires ! L'heure de début ne peux pas être identique à l'heure de fin !", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+
+            }
+
+            //Verif que l'heure de debut est inferieure a l'heure de fin
             if (verif && indexHeureDbt > indexHeureFin)
             {
                 verif = false;
-                MessageBox.Show("Erreur dans la séléction des horaires ! L'heure de début ne peux pas étre supérieur à l'heure de fin !", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Erreur dans la séléction des horaires ! L'heure de début ne peux pas être supérieur à l'heure de fin !", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
@@ -275,15 +313,18 @@ namespace Projet_Gestion_Vehicules
                 {
                     //Inscription de la réservation
                     Reservation uneResa = new Reservation();
-
+                    DateTime dtResa = new DateTime();
+                    dtResa = dtDateResa.Value;
                     uneResa.setIdEmploye(new Employe(int.Parse(cmbListingEmploye.DisplayMember.ToString())));
                     uneResa.setIdVehicule(new Vehicule(int.Parse(cmbListingVehicule.DisplayMember.ToString())));
                     uneResa.setDateResa(dtDateResa.Value);
+                    
+                    uneResa.setHeureDbt(new TimeSpan(int.Parse(cmbListingHeureDbt.Text), int.Parse(cmbListingMinuteDbt.Text), 00));
                     uneResa.setHeureDbt(new TimeSpan(int.Parse(cmbListingHeureDbt.Text), int.Parse(cmbListingMinuteDbt.Text), 00));
                     uneResa.setHeureFin(new TimeSpan(int.Parse(cmbListingHeureFin.Text), int.Parse(cmbListingMinuteFin.Text), 00));
                     uneCo.AddReservation(uneResa.getIdVehicule().getId(), uneResa.getIdEmploye().getId(), uneResa.getDateResa(), uneResa.getHeureDbt(), uneResa.getHeureFin());
                     MessageBox.Show("Réservation effectuée avec succès !", "Confirmation", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    LoadDtgReservation();
+                    refreshAll();
                     //Remise à zéro des champs de saisie
                     cmbListingVehicule.Text = "";
                     cmbListingEmploye.Text = "";
@@ -327,7 +368,7 @@ namespace Projet_Gestion_Vehicules
                     MessageBox.Show("Employé inséré avec succès !","Confirmation",MessageBoxButtons.OK,MessageBoxIcon.Information);
                     txtBoxNom.Text = "";
                     txtBoxPrenom.Text = "";
-                    LoadDtgEmploye();
+                    refreshAll();
                 }
                 else
                 {
@@ -339,18 +380,20 @@ namespace Projet_Gestion_Vehicules
 
         private void btnCreaVehicules_Click(object sender, EventArgs e)
         {
-            if (txtBoxImmat.Text == "" || comboTypeVehicule.SelectedItem == null)
+            if (txtBoxImmat.Text == "" || cmbTypeVehicule.SelectedItem == null)
             {
                 MessageBox.Show("Impossible de créer ce véhicule. Veuillez remplir tout les champs !","Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
-                //TODO Ajouter type véhicule
-                Vehicule unV = new Vehicule(txtBoxImmat.Text, datePickerMEC.Value);
-                uneCo.AddV(unV.getImmat(), unV.getDateMEC());
+                
+                MessageBox.Show(cmbTypeVehicule.DisplayMember.ToString());
+                Vehicule unV = new Vehicule(txtBoxImmat.Text, datePickerMEC.Value,new TypeVehicule(int.Parse(cmbTypeVehicule.DisplayMember.ToString())));
+                uneCo.AddV(unV.getImmat(), unV.getDateMEC(), unV.getTypeV().getId());
                 MessageBox.Show("Véhicule inséré ! ");
                 txtBoxImmat.Text = "";
-                comboTypeVehicule.Text = "";
+                cmbTypeVehicule.Text = "";
+                refreshAll();
             }
         }
 
@@ -486,12 +529,88 @@ namespace Projet_Gestion_Vehicules
 
         private void btnSupprEmploye_Click(object sender, EventArgs e)
         {
-            String index = dtGVEmployes.CurrentRow.ToString();
+            int rowIndex = dtGVEmployes.CurrentCell.RowIndex;
+            String nomEploye = dtGVEmployes.Rows[rowIndex].Cells[0].Value.ToString();
+            String prenomEmploye = dtGVEmployes.Rows[rowIndex].Cells[1].Value.ToString();
+            String dateNaissanceEmploye = dtGVEmployes.Rows[rowIndex].Cells[2].Value.ToString();
+            Employe employeASupprimer = new Employe(nomEploye, prenomEmploye, DateTime.Parse(dateNaissanceEmploye));
+            
+            var result = MessageBox.Show("Etes-vous sur de vouloir supprimés l'employé : " + nomEploye + " " + prenomEmploye + " ?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if(result== DialogResult.Yes)
+            {
+                uneCo.deleteEmploye(employeASupprimer);
+                MessageBox.Show("Employé supprimé avec succès !", "Confirmation", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            refreshAll();
         }
 
         private void tabVehicules_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnExportExcel_Click(object sender, EventArgs e)
+        {
+            // creating Excel Application  
+            Microsoft.Office.Interop.Excel._Application app = new Microsoft.Office.Interop.Excel.Application();
+            // creating new WorkBook within Excel application  
+            Microsoft.Office.Interop.Excel._Workbook workbook = app.Workbooks.Add(Type.Missing);
+            // creating new Excelsheet in workbook  
+            Microsoft.Office.Interop.Excel._Worksheet worksheet = null;
+            // see the excel sheet behind the program  
+            app.Visible = true;
+            // get the reference of first sheet. By default its name is Sheet1.  
+            // store its reference to worksheet  
+            worksheet = workbook.Sheets["Feuil1"];
+            worksheet = workbook.ActiveSheet;
+            // changing the name of active sheet  
+            worksheet.Name = "Exported from gridview";
+            // storing header part in Excel  
+            for (int i = 1; i < dtGVConsultationGlobaleReservation.Columns.Count + 1; i++)
+            {
+                worksheet.Cells[1, i] = dtGVConsultationGlobaleReservation.Columns[i - 1].HeaderText;
+            }
+            // storing Each row and column value to excel sheet  
+            for (int i = 0; i < dtGVConsultationGlobaleReservation.Rows.Count - 1; i++)
+            {
+                for (int j = 0; j < dtGVConsultationGlobaleReservation.Columns.Count; j++)
+                {
+                    worksheet.Cells[i + 2, j + 1] = dtGVConsultationGlobaleReservation.Rows[i].Cells[j].Value.ToString();
+                }
+            }
+            // save the application  
+            workbook.SaveAs("c:\\output.xls", Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlExclusive, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+            // Exit from the application  
+            app.Quit();
+        }
+
+        private void btnSupprVehicule_Click(object sender, EventArgs e)
+        {
+            int rowIndex = dtGVVehicules.CurrentCell.RowIndex;
+            String immat = dtGVVehicules.Rows[rowIndex].Cells[0].Value.ToString();
+            DateTime DMEC = DateTime.Parse(dtGVVehicules.Rows[rowIndex].Cells[1].Value.ToString());
+            Vehicule vehiculeASupprr = new Vehicule(immat,DMEC);
+
+            var result = MessageBox.Show("Etes-vous sur de vouloir supprimés le véhicule : " + immat + " ?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                uneCo.deleteVehicule(vehiculeASupprr);
+                MessageBox.Show("Véhicule supprimé avec succès !", "Confirmation", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            refreshAll();
+        }
+
+        /// <summary>
+        /// Procédure qui permet de "rafraichir" tout les composants affichant des données de la base
+        /// </summary>
+        public void refreshAll()
+        {
+            LoadCmbEmploye();
+            LoadCmbTypeVehicule();
+            LoadCmbVehicule();
+            LoadDtgEmploye();
+            LoadDtgReservation();
+            LoadDtgVehicules();
         }
     }
 }

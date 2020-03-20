@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(formPrinc));
             this.Onglets = new System.Windows.Forms.TabControl();
             this.tabEmployes = new System.Windows.Forms.TabPage();
             this.btnSupprEmploye = new System.Windows.Forms.Button();
@@ -48,7 +49,11 @@
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.tabVehicules = new System.Windows.Forms.TabPage();
-            this.comboTypeVehicule = new System.Windows.Forms.ComboBox();
+            this.btnSupprVehicule = new System.Windows.Forms.Button();
+            this.dtGVVehicules = new System.Windows.Forms.DataGridView();
+            this.immat = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dtMEC = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cmbTypeVehicule = new System.Windows.Forms.ComboBox();
             this.datePickerMEC = new System.Windows.Forms.DateTimePicker();
             this.btnCreaVehicules = new System.Windows.Forms.Button();
             this.label12 = new System.Windows.Forms.Label();
@@ -56,8 +61,8 @@
             this.txtBoxImmat = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
-            this.btnAddEmployes = new System.Windows.Forms.Button();
             this.tabResa = new System.Windows.Forms.TabPage();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.cmbListingMinuteFin = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.cmbListingMinuteDbt = new System.Windows.Forms.ComboBox();
@@ -75,7 +80,8 @@
             this.cmbListingEmploye = new System.Windows.Forms.ComboBox();
             this.lblTitre = new System.Windows.Forms.Label();
             this.tabRecap = new System.Windows.Forms.TabPage();
-            this.btnExport = new System.Windows.Forms.Button();
+            this.btnExportExcel = new System.Windows.Forms.Button();
+            this.btnExportPDF = new System.Windows.Forms.Button();
             this.btnReInit = new System.Windows.Forms.Button();
             this.btnRechercheEmployeEtVehicule = new System.Windows.Forms.Button();
             this.cmbListingVehiculeReservation = new System.Windows.Forms.ComboBox();
@@ -99,7 +105,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.dtGVEmployes)).BeginInit();
             this.gpSexe.SuspendLayout();
             this.tabVehicules.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dtGVVehicules)).BeginInit();
             this.tabResa.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.tabRecap.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtGVConsultationGlobaleReservation)).BeginInit();
             this.SuspendLayout();
@@ -114,7 +122,7 @@
             this.Onglets.Margin = new System.Windows.Forms.Padding(2);
             this.Onglets.Name = "Onglets";
             this.Onglets.SelectedIndex = 0;
-            this.Onglets.Size = new System.Drawing.Size(866, 406);
+            this.Onglets.Size = new System.Drawing.Size(866, 452);
             this.Onglets.TabIndex = 0;
             // 
             // tabEmployes
@@ -136,7 +144,7 @@
             this.tabEmployes.Margin = new System.Windows.Forms.Padding(2);
             this.tabEmployes.Name = "tabEmployes";
             this.tabEmployes.Padding = new System.Windows.Forms.Padding(2);
-            this.tabEmployes.Size = new System.Drawing.Size(858, 380);
+            this.tabEmployes.Size = new System.Drawing.Size(858, 426);
             this.tabEmployes.TabIndex = 0;
             this.tabEmployes.Text = "Gestion des employés";
             // 
@@ -167,6 +175,7 @@
             this.dtGVEmployes.ReadOnly = true;
             this.dtGVEmployes.RowHeadersWidth = 51;
             this.dtGVEmployes.RowTemplate.Height = 24;
+            this.dtGVEmployes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dtGVEmployes.Size = new System.Drawing.Size(426, 286);
             this.dtGVEmployes.TabIndex = 23;
             // 
@@ -232,13 +241,14 @@
             // 
             // btnAddEmploye
             // 
+            this.btnAddEmploye.BackColor = System.Drawing.Color.YellowGreen;
             this.btnAddEmploye.Location = new System.Drawing.Point(44, 288);
             this.btnAddEmploye.Margin = new System.Windows.Forms.Padding(2);
             this.btnAddEmploye.Name = "btnAddEmploye";
-            this.btnAddEmploye.Size = new System.Drawing.Size(154, 50);
+            this.btnAddEmploye.Size = new System.Drawing.Size(155, 50);
             this.btnAddEmploye.TabIndex = 21;
             this.btnAddEmploye.Text = "Créer un employé";
-            this.btnAddEmploye.UseVisualStyleBackColor = true;
+            this.btnAddEmploye.UseVisualStyleBackColor = false;
             this.btnAddEmploye.Click += new System.EventHandler(this.btnAddEmploye_Click);
             // 
             // dtDateNaiss
@@ -322,7 +332,9 @@
             // tabVehicules
             // 
             this.tabVehicules.BackColor = System.Drawing.Color.Silver;
-            this.tabVehicules.Controls.Add(this.comboTypeVehicule);
+            this.tabVehicules.Controls.Add(this.btnSupprVehicule);
+            this.tabVehicules.Controls.Add(this.dtGVVehicules);
+            this.tabVehicules.Controls.Add(this.cmbTypeVehicule);
             this.tabVehicules.Controls.Add(this.datePickerMEC);
             this.tabVehicules.Controls.Add(this.btnCreaVehicules);
             this.tabVehicules.Controls.Add(this.label12);
@@ -330,43 +342,82 @@
             this.tabVehicules.Controls.Add(this.txtBoxImmat);
             this.tabVehicules.Controls.Add(this.label14);
             this.tabVehicules.Controls.Add(this.label15);
-            this.tabVehicules.Controls.Add(this.btnAddEmployes);
             this.tabVehicules.Location = new System.Drawing.Point(4, 22);
             this.tabVehicules.Margin = new System.Windows.Forms.Padding(2);
             this.tabVehicules.Name = "tabVehicules";
             this.tabVehicules.Padding = new System.Windows.Forms.Padding(2);
-            this.tabVehicules.Size = new System.Drawing.Size(858, 380);
+            this.tabVehicules.Size = new System.Drawing.Size(858, 426);
             this.tabVehicules.TabIndex = 1;
             this.tabVehicules.Text = "Gestion des véhicules";
             this.tabVehicules.Click += new System.EventHandler(this.tabVehicules_Click);
             // 
-            // comboTypeVehicule
+            // btnSupprVehicule
             // 
-            this.comboTypeVehicule.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboTypeVehicule.FormattingEnabled = true;
-            this.comboTypeVehicule.Location = new System.Drawing.Point(178, 61);
-            this.comboTypeVehicule.Margin = new System.Windows.Forms.Padding(2);
-            this.comboTypeVehicule.Name = "comboTypeVehicule";
-            this.comboTypeVehicule.Size = new System.Drawing.Size(151, 21);
-            this.comboTypeVehicule.TabIndex = 17;
+            this.btnSupprVehicule.BackColor = System.Drawing.Color.Red;
+            this.btnSupprVehicule.Location = new System.Drawing.Point(393, 325);
+            this.btnSupprVehicule.Margin = new System.Windows.Forms.Padding(2);
+            this.btnSupprVehicule.Name = "btnSupprVehicule";
+            this.btnSupprVehicule.Size = new System.Drawing.Size(109, 34);
+            this.btnSupprVehicule.TabIndex = 25;
+            this.btnSupprVehicule.Text = "Supprimer ce véhicule";
+            this.btnSupprVehicule.UseVisualStyleBackColor = false;
+            this.btnSupprVehicule.Click += new System.EventHandler(this.btnSupprEmploye_Click);
+            // 
+            // dtGVVehicules
+            // 
+            this.dtGVVehicules.AllowUserToAddRows = false;
+            this.dtGVVehicules.AllowUserToDeleteRows = false;
+            this.dtGVVehicules.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dtGVVehicules.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.immat,
+            this.dtMEC});
+            this.dtGVVehicules.Location = new System.Drawing.Point(393, 5);
+            this.dtGVVehicules.Name = "dtGVVehicules";
+            this.dtGVVehicules.ReadOnly = true;
+            this.dtGVVehicules.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dtGVVehicules.Size = new System.Drawing.Size(258, 315);
+            this.dtGVVehicules.TabIndex = 18;
+            // 
+            // immat
+            // 
+            this.immat.HeaderText = "Immatriculation";
+            this.immat.Name = "immat";
+            this.immat.ReadOnly = true;
+            // 
+            // dtMEC
+            // 
+            this.dtMEC.HeaderText = "Date de mise en circulation";
+            this.dtMEC.Name = "dtMEC";
+            this.dtMEC.ReadOnly = true;
+            // 
+            // cmbTypeVehicule
+            // 
+            this.cmbTypeVehicule.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTypeVehicule.FormattingEnabled = true;
+            this.cmbTypeVehicule.Location = new System.Drawing.Point(178, 61);
+            this.cmbTypeVehicule.Margin = new System.Windows.Forms.Padding(2);
+            this.cmbTypeVehicule.Name = "cmbTypeVehicule";
+            this.cmbTypeVehicule.Size = new System.Drawing.Size(151, 21);
+            this.cmbTypeVehicule.TabIndex = 17;
             // 
             // datePickerMEC
             // 
             this.datePickerMEC.Location = new System.Drawing.Point(178, 139);
             this.datePickerMEC.Margin = new System.Windows.Forms.Padding(2);
             this.datePickerMEC.Name = "datePickerMEC";
-            this.datePickerMEC.Size = new System.Drawing.Size(151, 20);
+            this.datePickerMEC.Size = new System.Drawing.Size(172, 20);
             this.datePickerMEC.TabIndex = 16;
             // 
             // btnCreaVehicules
             // 
+            this.btnCreaVehicules.BackColor = System.Drawing.Color.YellowGreen;
             this.btnCreaVehicules.Location = new System.Drawing.Point(80, 193);
             this.btnCreaVehicules.Margin = new System.Windows.Forms.Padding(2);
             this.btnCreaVehicules.Name = "btnCreaVehicules";
-            this.btnCreaVehicules.Size = new System.Drawing.Size(136, 73);
+            this.btnCreaVehicules.Size = new System.Drawing.Size(155, 50);
             this.btnCreaVehicules.TabIndex = 15;
             this.btnCreaVehicules.Text = "Créer le vehicule";
-            this.btnCreaVehicules.UseVisualStyleBackColor = true;
+            this.btnCreaVehicules.UseVisualStyleBackColor = false;
             this.btnCreaVehicules.Click += new System.EventHandler(this.btnCreaVehicules_Click);
             // 
             // label12
@@ -419,21 +470,10 @@
             this.label15.TabIndex = 10;
             this.label15.Text = "Création d\'un véhicule : ";
             // 
-            // btnAddEmployes
-            // 
-            this.btnAddEmployes.Enabled = false;
-            this.btnAddEmployes.Location = new System.Drawing.Point(4, 336);
-            this.btnAddEmployes.Margin = new System.Windows.Forms.Padding(2);
-            this.btnAddEmployes.Name = "btnAddEmployes";
-            this.btnAddEmployes.Size = new System.Drawing.Size(109, 42);
-            this.btnAddEmployes.TabIndex = 1;
-            this.btnAddEmployes.Text = "Ajouter un employée";
-            this.btnAddEmployes.UseVisualStyleBackColor = true;
-            this.btnAddEmployes.Click += new System.EventHandler(this.BtnAddEmployes_Click);
-            // 
             // tabResa
             // 
             this.tabResa.BackColor = System.Drawing.Color.Silver;
+            this.tabResa.Controls.Add(this.pictureBox1);
             this.tabResa.Controls.Add(this.cmbListingMinuteFin);
             this.tabResa.Controls.Add(this.label6);
             this.tabResa.Controls.Add(this.cmbListingMinuteDbt);
@@ -454,9 +494,18 @@
             this.tabResa.Margin = new System.Windows.Forms.Padding(2);
             this.tabResa.Name = "tabResa";
             this.tabResa.Padding = new System.Windows.Forms.Padding(2);
-            this.tabResa.Size = new System.Drawing.Size(858, 380);
+            this.tabResa.Size = new System.Drawing.Size(858, 426);
             this.tabResa.TabIndex = 2;
             this.tabResa.Text = "Créer une réservation";
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(349, 54);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(492, 316);
+            this.pictureBox1.TabIndex = 19;
+            this.pictureBox1.TabStop = false;
             // 
             // cmbListingMinuteFin
             // 
@@ -520,13 +569,14 @@
             // 
             // btnResa
             // 
+            this.btnResa.BackColor = System.Drawing.Color.YellowGreen;
             this.btnResa.Location = new System.Drawing.Point(34, 275);
             this.btnResa.Margin = new System.Windows.Forms.Padding(2);
             this.btnResa.Name = "btnResa";
-            this.btnResa.Size = new System.Drawing.Size(156, 58);
+            this.btnResa.Size = new System.Drawing.Size(155, 50);
             this.btnResa.TabIndex = 12;
             this.btnResa.Text = "Créer la réservation";
-            this.btnResa.UseVisualStyleBackColor = true;
+            this.btnResa.UseVisualStyleBackColor = false;
             this.btnResa.Click += new System.EventHandler(this.btnResa_Click);
             // 
             // cmbListingHeureFin
@@ -621,7 +671,8 @@
             // tabRecap
             // 
             this.tabRecap.BackColor = System.Drawing.Color.Silver;
-            this.tabRecap.Controls.Add(this.btnExport);
+            this.tabRecap.Controls.Add(this.btnExportExcel);
+            this.tabRecap.Controls.Add(this.btnExportPDF);
             this.tabRecap.Controls.Add(this.btnReInit);
             this.tabRecap.Controls.Add(this.btnRechercheEmployeEtVehicule);
             this.tabRecap.Controls.Add(this.cmbListingVehiculeReservation);
@@ -638,21 +689,33 @@
             this.tabRecap.Margin = new System.Windows.Forms.Padding(2);
             this.tabRecap.Name = "tabRecap";
             this.tabRecap.Padding = new System.Windows.Forms.Padding(2);
-            this.tabRecap.Size = new System.Drawing.Size(858, 380);
+            this.tabRecap.Size = new System.Drawing.Size(858, 426);
             this.tabRecap.TabIndex = 3;
             this.tabRecap.Text = "Récapitulatif";
             // 
-            // btnExport
+            // btnExportExcel
             // 
-            this.btnExport.BackColor = System.Drawing.Color.Red;
-            this.btnExport.Location = new System.Drawing.Point(739, 58);
-            this.btnExport.Margin = new System.Windows.Forms.Padding(2);
-            this.btnExport.Name = "btnExport";
-            this.btnExport.Size = new System.Drawing.Size(117, 43);
-            this.btnExport.TabIndex = 32;
-            this.btnExport.Text = "Exporter en PDF";
-            this.btnExport.UseVisualStyleBackColor = false;
-            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
+            this.btnExportExcel.BackColor = System.Drawing.Color.OliveDrab;
+            this.btnExportExcel.Location = new System.Drawing.Point(739, 53);
+            this.btnExportExcel.Margin = new System.Windows.Forms.Padding(2);
+            this.btnExportExcel.Name = "btnExportExcel";
+            this.btnExportExcel.Size = new System.Drawing.Size(117, 43);
+            this.btnExportExcel.TabIndex = 33;
+            this.btnExportExcel.Text = "Exporter en EXCEL";
+            this.btnExportExcel.UseVisualStyleBackColor = false;
+            this.btnExportExcel.Click += new System.EventHandler(this.btnExportExcel_Click);
+            // 
+            // btnExportPDF
+            // 
+            this.btnExportPDF.BackColor = System.Drawing.Color.Red;
+            this.btnExportPDF.Location = new System.Drawing.Point(739, 100);
+            this.btnExportPDF.Margin = new System.Windows.Forms.Padding(2);
+            this.btnExportPDF.Name = "btnExportPDF";
+            this.btnExportPDF.Size = new System.Drawing.Size(117, 43);
+            this.btnExportPDF.TabIndex = 32;
+            this.btnExportPDF.Text = "Exporter en PDF";
+            this.btnExportPDF.UseVisualStyleBackColor = false;
+            this.btnExportPDF.Click += new System.EventHandler(this.btnExport_Click);
             // 
             // btnReInit
             // 
@@ -776,12 +839,13 @@
             this.dateResa,
             this.heuredbt,
             this.heurefin});
-            this.dtGVConsultationGlobaleReservation.Location = new System.Drawing.Point(4, 106);
+            this.dtGVConsultationGlobaleReservation.Location = new System.Drawing.Point(8, 151);
             this.dtGVConsultationGlobaleReservation.Margin = new System.Windows.Forms.Padding(2);
             this.dtGVConsultationGlobaleReservation.Name = "dtGVConsultationGlobaleReservation";
             this.dtGVConsultationGlobaleReservation.ReadOnly = true;
             this.dtGVConsultationGlobaleReservation.RowHeadersWidth = 51;
             this.dtGVConsultationGlobaleReservation.RowTemplate.Height = 24;
+            this.dtGVConsultationGlobaleReservation.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dtGVConsultationGlobaleReservation.Size = new System.Drawing.Size(800, 271);
             this.dtGVConsultationGlobaleReservation.TabIndex = 20;
             // 
@@ -838,7 +902,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FloralWhite;
-            this.ClientSize = new System.Drawing.Size(884, 419);
+            this.ClientSize = new System.Drawing.Size(884, 473);
             this.Controls.Add(this.Onglets);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(2);
@@ -853,8 +917,10 @@
             this.gpSexe.PerformLayout();
             this.tabVehicules.ResumeLayout(false);
             this.tabVehicules.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dtGVVehicules)).EndInit();
             this.tabResa.ResumeLayout(false);
             this.tabResa.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.tabRecap.ResumeLayout(false);
             this.tabRecap.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtGVConsultationGlobaleReservation)).EndInit();
@@ -867,7 +933,6 @@
         private System.Windows.Forms.TabControl Onglets;
         private System.Windows.Forms.TabPage tabEmployes;
         private System.Windows.Forms.TabPage tabVehicules;
-        private System.Windows.Forms.Button btnAddEmployes;
         private System.Windows.Forms.TabPage tabResa;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox cmbListingHeureDbt;
@@ -901,7 +966,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Nom;
         private System.Windows.Forms.DataGridViewTextBoxColumn Prénom;
         private System.Windows.Forms.DataGridViewTextBoxColumn DateNaissance;
-        private System.Windows.Forms.ComboBox comboTypeVehicule;
+        private System.Windows.Forms.ComboBox cmbTypeVehicule;
         private System.Windows.Forms.DateTimePicker datePickerMEC;
         private System.Windows.Forms.Button btnCreaVehicules;
         private System.Windows.Forms.Label label12;
@@ -928,8 +993,14 @@
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.Button btnRechercheEmployeEtVehicule;
         private System.Windows.Forms.Button btnReInit;
-        private System.Windows.Forms.Button btnExport;
+        private System.Windows.Forms.Button btnExportPDF;
         private System.Windows.Forms.Button btnSupprEmploye;
+        private System.Windows.Forms.Button btnExportExcel;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.DataGridView dtGVVehicules;
+        private System.Windows.Forms.DataGridViewTextBoxColumn immat;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dtMEC;
+        private System.Windows.Forms.Button btnSupprVehicule;
     }
 }
 

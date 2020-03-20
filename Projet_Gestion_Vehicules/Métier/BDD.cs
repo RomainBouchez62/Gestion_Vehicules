@@ -28,25 +28,26 @@ namespace Projet_Gestion_Vehicules.Métier
         /// </summary>
         /// <param name="immat">immatriculatin du véhicule</param>
         /// <param name="DMEC">date de mise ne circulation du vehicule</param>
-        public void AddV(String immat, DateTime DMEC)
+        public void AddV(String immat, DateTime DMEC,int idType)
         {
             try
             {
                 this.connection.Open();
                 MySqlCommand maReq = this.connection.CreateCommand();
 
-                maReq.CommandText = "INSERT INTO vehicule(immatriculation,dateMiseEnCirculation) VALUES(@immat,@dateMEC)";
+                maReq.CommandText = "INSERT INTO vehicule(immatriculation,dateMiseEnCirculation,typeVehicule) VALUES(@immat,@dateMEC,@typeV)";
 
                 maReq.Parameters.AddWithValue("@immat", immat);
                 maReq.Parameters.AddWithValue("@dateMEC", DMEC);
+                maReq.Parameters.AddWithValue("@typeV", idType);
 
                 maReq.ExecuteNonQuery();
 
                 this.connection.Close();
             }
-            catch
+            catch(Exception ex)
             {
-                
+                Console.WriteLine(ex.Message);
             }
         }
 
@@ -133,22 +134,23 @@ namespace Projet_Gestion_Vehicules.Métier
                 this.connection.Open();
                 MySqlCommand maReq = this.connection.CreateCommand();
 
-                maReq.CommandText = "SELECT nomTypeVehicule FROM typevehicule";
+                maReq.CommandText = "SELECT idTypeVehicule,nomTypeVehicule FROM typevehicule";
                 maReq.ExecuteNonQuery();
                 MySqlDataReader reader = maReq.ExecuteReader();
 
                 while(reader.Read())
                 {
-                    String monType = reader[0].ToString();
-                    mesTypesVehicules.Add(new TypeVehicule(monType[0].ToString().ToUpper() + monType.Substring(1).ToLower()));
+                    String monType=reader[1].ToString();
+                    String monTypeModifie = monType[0].ToString().ToUpper() + monType.Substring(1).ToLower();
+                    mesTypesVehicules.Add(new TypeVehicule(int.Parse(reader[0].ToString()), monTypeModifie));
                 }
 
                 this.connection.Close();
                 
             }
-            catch
+            catch (Exception ex)
             {
-
+                Console.WriteLine(ex.Message);
             }
             return mesTypesVehicules;
         }
@@ -222,14 +224,44 @@ namespace Projet_Gestion_Vehicules.Métier
                 this.connection.Close();
 
             }
-            catch
+            catch (Exception ex)
             {
-
+                Console.WriteLine(ex.Message);
             }
             return maListeDeReservations;
         }
 
 
+
+        public List<Vehicule> giveAllVehicules()
+        {
+            List<Vehicule> mesVehicules = new List<Vehicule>();
+            try
+            {
+                this.connection.Open();
+                MySqlCommand maReq = this.connection.CreateCommand();
+
+                maReq.CommandText = "SELECT idVehicule,immatriculation,dateMiseEnCirculation,TV.nomTypeVehicule " +
+                                    "FROM vehicule V " +
+                                    "INNER JOIN typevehicule TV " +
+                                    "ON V.typeVehicule=TV.idTypeVehicule";
+                maReq.ExecuteNonQuery();
+                MySqlDataReader reader = maReq.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    mesVehicules.Add(new Vehicule(int.Parse(reader[0].ToString()),reader[1].ToString(),DateTime.Parse(reader[2].ToString())));
+                }
+
+                this.connection.Close();
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return mesVehicules;
+        }
 
         /// <summary>
         /// Fonction qui récupère les réservations entre deux dates 
@@ -370,8 +402,7 @@ namespace Projet_Gestion_Vehicules.Métier
             return mesV;
         }
 
-
-
+        
         /// <summary>
         /// Fonction qui verifie la présence ou non d'une réservation recue en paramètre
         /// </summary>
@@ -475,6 +506,59 @@ namespace Projet_Gestion_Vehicules.Métier
                 Console.WriteLine(ex.Message);
             }
             return present;
+        }
+
+        public void deleteEmploye(Employe unE)
+        {
+            try
+            {
+                this.connection.Open();
+                MySqlCommand maReq = this.connection.CreateCommand();
+
+                maReq.CommandText = "DELETE FROM employes "+
+                                    "WHERE nom=@nomEmp "+
+                                    "AND prenom=@prenomEmp " +
+                                    "AND dateNaissance=@dtNaiss";
+
+                maReq.Parameters.AddWithValue("@nomEmp", unE.getNom());
+                maReq.Parameters.AddWithValue("@prenomEmp", unE.getPrenom());
+                maReq.Parameters.AddWithValue("@dtNaiss", unE.getDateNaiss());
+
+                maReq.ExecuteNonQuery();
+                
+                this.connection.Close();
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public void deleteVehicule(Vehicule unV)
+        {
+            try
+            {
+                this.connection.Open();
+                MySqlCommand maReq = this.connection.CreateCommand();
+
+                maReq.CommandText = "DELETE FROM employes " +
+                                    "WHERE nom=@nomEmp " +
+                                    "AND prenom=@prenomEmp " +
+                                    "AND dateNaissance=@dtNaiss";
+
+                maReq.Parameters.AddWithValue("@nomEmp", unV.getImmat());
+                maReq.Parameters.AddWithValue("@prenomEmp", unV.getDateMEC());
+
+                maReq.ExecuteNonQuery();
+
+                this.connection.Close();
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
     }
 }
